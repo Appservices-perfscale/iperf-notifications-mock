@@ -51,3 +51,14 @@ BUt if you want to build the image locally from git repo:
 And to run it:
 
     podman run --rm -ti -p 5000:5000 perfscale-demo-app
+
+
+Testing
+-------
+
+There is a simple Locust script to use:
+
+    flask init-db
+    flask test-data
+    flask run
+    locust --locustfile testing.py --headless --users 50 --spawn-rate 50 -H http://localhost:5000 --run-time 30 --print-stats --only-summary --stop-timeout 10
