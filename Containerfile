@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi
+FROM registry.access.redhat.com/ubi9/ubi
 
 MAINTAINER Jan Hutar <jhutar@redhat.com>
 
@@ -6,9 +6,9 @@ WORKDIR /usr/src/app
 
 ENV FLASK_APP myapp.py
 
-RUN INSTALL_PKGS="python3" \
-  && yum -y install $INSTALL_PKGS \
-  && yum clean all
+RUN INSTALL_PKGS="python3 python3-pip" \
+  && dnf -y install $INSTALL_PKGS \
+  && dnf clean all
 
 COPY requirements.txt .
 
