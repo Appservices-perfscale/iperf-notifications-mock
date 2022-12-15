@@ -64,9 +64,11 @@ def get_request(request_id):
     """Test."""
     db = get_db()
     cur = db.cursor()
-    cur.execute("SELECT created_at FROM requests WHERE request_id = %s", (request_id,))
-    created_at = cur.fetchone()[0]
-    return f"Request {request_id} crated at {created_at}"
+    cur.execute("UPDATE requests SET dispatched_at = NOW(), dispatched_count = dispatched_count + 1 WHERE request_id = %s RETURNING created_at, dispatched_at, dispatched_count", (request_id,))
+    created_at, dispatched_at, dispatched_count = cur.fetchone()
+    db.commit()
+    cur.close()
+    return f"Request {request_id} crated at {created_at} and dispatched at {dispatched_at} count {dispatched_count}"
 
 
 ##########
@@ -85,7 +87,8 @@ def init_db_command():
         CREATE TABLE requests (
                 request_id VARCHAR PRIMARY KEY,
                 created_at TIMESTAMP WITH TIME ZONE NULL,
-                dispatched_at TIMESTAMP WITH TIME ZONE NULL);
+                dispatched_at TIMESTAMP WITH TIME ZONE NULL,
+                dispatched_count INTEGER DEFAULT 0);
         CREATE INDEX request_id_idx
                 ON requests (request_id);
         """
