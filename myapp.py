@@ -7,7 +7,7 @@ import time
 
 import click
 
-from flask import Flask, current_app, g
+from flask import Flask, current_app, g, request
 
 import psycopg2.pool
 
@@ -58,6 +58,12 @@ app.logger.info(f"Initialized DB pool (min {app.config['DB_POOL_COUNT_MIN']}, ma
 ##########
 # Routes
 ##########
+
+@app.route('/code/200', methods=['GET'])
+def get_code_200():
+    print(f">>> data: {request.data}")
+    print(f">>> values: {request.values}")
+    return "Hello there"
 
 @app.route('/request/<string:request_id>', methods=['GET'])
 def get_request(request_id):
