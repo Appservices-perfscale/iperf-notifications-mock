@@ -67,15 +67,17 @@ def get_request():
     print(f">>> headers: {request.headers}")
     
     request_id_in = request.get_json()["events"][0]["metadata"]["id"]
-
-    db = get_db()
-    cur = db.cursor()
-    cur.execute("UPDATE items_notifications SET dispatched_at = NOW(), dispatched_count = dispatched_count + 1 WHERE id = %s RETURNING id, sent_at, dispatched_at, dispatched_count", (request_id_in,))
-    request_id_out, sent_at, dispatched_at, dispatched_count = cur.fetchone()
-    db.commit()
-    cur.close()
     
-    return f"Request {request_id_out} sent at {sent_at} and dispatched at {dispatched_at} count {dispatched_count}"
+    return request_id_in
+
+#     db = get_db()
+#     cur = db.cursor()
+#     cur.execute("UPDATE items_notifications SET dispatched_at = NOW(), dispatched_count = dispatched_count + 1 WHERE id = %s RETURNING id, sent_at, dispatched_at, dispatched_count", (request_id_in,))
+#     request_id_out, sent_at, dispatched_at, dispatched_count = cur.fetchone()
+#     db.commit()
+#     cur.close()
+    
+#     return f"Request {request_id_out} sent at {sent_at} and dispatched at {dispatched_at} count {dispatched_count}"
 
 
 ##########
