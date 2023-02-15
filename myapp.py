@@ -59,7 +59,7 @@ app.logger.info(f"Initialized DB pool (min {app.config['DB_POOL_COUNT_MIN']}, ma
 # Routes
 ##########
 
-@app.route('/request/200', methods=['GET'])
+@app.route('/code/200', methods=['GET'])
 def get_request():
     """Test."""
     print(f">>> data: {request.data}")
