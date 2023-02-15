@@ -66,7 +66,7 @@ def get_request():
     print(f">>> values: {request.values}")
     print(f">>> headers: {request.headers}")
     
-    request_id_in = request.data["events"][0]["metadata"]["id"]
+    request_id_in = request.get_json()["events"][0]["metadata"]["id"]
 
     db = get_db()
     cur = db.cursor()
@@ -113,7 +113,8 @@ def test_data_command():
     db = get_db()
     cur = db.cursor()
 
-    cur.execute("INSERT INTO requests (request_id, created_at) VALUES ('abc', NOW())")
+    cur.execute("INSERT INTO requests (request_id, created_at) 
+                ('abc', NOW())")
 
     db.commit()
     cur.close()
