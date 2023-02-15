@@ -59,23 +59,23 @@ app.logger.info(f"Initialized DB pool (min {app.config['DB_POOL_COUNT_MIN']}, ma
 # Routes
 ##########
 
-@app.route('/code/200', methods=['GET'])
-def get_code_200():
+@app.route('/request/200', methods=['GET'])
+def get_request():
+    """Test."""
     print(f">>> data: {request.data}")
     print(f">>> values: {request.values}")
     print(f">>> headers: {request.headers}")
-    return "Hello there"
+    
+    request_id_in = request.data["events"][0]["metadata"]["id"]
 
-@app.route('/request/<string:request_id>', methods=['GET'])
-def get_request(request_id):
-    """Test."""
     db = get_db()
     cur = db.cursor()
-    cur.execute("UPDATE requests SET dispatched_at = NOW(), dispatched_count = dispatched_count + 1 WHERE request_id = %s RETURNING created_at, dispatched_at, dispatched_count", (request_id,))
-    created_at, dispatched_at, dispatched_count = cur.fetchone()
+    cur.execute("UPDATE items_notifications SET dispatched_at = NOW(), dispatched_count = dispatched_count + 1 WHERE id = %s RETURNING id, sent_at, dispatched_at, dispatched_count", (request_id_in,))
+    request_id_out, sent_at, dispatched_at, dispatched_count = cur.fetchone()
     db.commit()
     cur.close()
-    return f"Request {request_id} crated at {created_at} and dispatched at {dispatched_at} count {dispatched_count}"
+    
+    return f"Request {request_id_out} sent at {sent_at} and dispatched at {dispatched_at} count {dispatched_count}"
 
 
 ##########
