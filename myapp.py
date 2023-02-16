@@ -115,13 +115,13 @@ def test_data_command():
     db = get_db()
     cur = db.cursor()
 
-    cur.execute("INSERT INTO requests (request_id, created_at) 
-                ('abc', NOW())")
+#     cur.execute("INSERT INTO requests (request_id, created_at) 
+#                 ('abc', NOW())")
 
-    db.commit()
-    cur.close()
+#     db.commit()
+#     cur.close()
 
-    click.echo('Added a record to the database.')
+#     click.echo('Added a record to the database.')
 
 
 app.cli.add_command(init_db_command)
