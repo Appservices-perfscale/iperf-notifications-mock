@@ -7,7 +7,7 @@ import time
 
 import click
 
-from flask import Flask, current_app, g, request
+from flask import Flask, current_app, g, request, jsonify
 
 import psycopg2.pool
 
@@ -66,9 +66,17 @@ def get_request():
     print(f">>> values: {request.values}")
     print(f">>> headers: {request.headers}")
     
-    request_id_in = request.get_json()["events"][0]["metadata"]["id"]
+    testing_dict = {"testing": "hello"}
     
-    return request_id_in
+    return jsonify(testing_dict)
+    
+#     request_id_in = request.get_json()["events"][0]["metadata"]["id"]
+
+    
+    
+    
+    
+#     return request_id_in
 
 #     db = get_db()
 #     cur = db.cursor()
