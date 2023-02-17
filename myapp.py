@@ -66,15 +66,11 @@ def get_request():
     print(f">>> values: {request.values}")
     print(f">>> headers: {request.headers}")
     
-    testing_dict = {"testing": "hello"}
+    testing_dict = {"data": request.data, "values" : request.values, "headers" : request.headers}
     
     return jsonify(testing_dict)
     
 #     request_id_in = request.get_json()["events"][0]["metadata"]["id"]
-
-    
-    
-    
     
 #     return request_id_in
 
