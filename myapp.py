@@ -4,7 +4,7 @@
 import os
 import random
 import time
-
+import datetime
 import click
 
 from flask import Flask, current_app, g, request, jsonify
@@ -67,22 +67,25 @@ def get_request():
     print(f">>> headers: {request.headers}")
     
     print(request.get_json())
-
     
-    request_id_in = request.get_json()["events"][0]["metadata"]["id"]
+    # request_id_in = request.get_json()["events"][0]["metadata"]["id"]
+    message_id = request.get_json()['message_id']
     sent_date = request.get_json()["timestamp"]
+
+    #TODO match NOW date 
 
     db = get_db()
     cur = db.cursor()
 
     sql = """
-    UPDATE items_notifications SET dispatched_at = NOW(), dispatched_count = dispatched_count + 1 WHERE request_id = %s AND sent_at::date = %s
+    UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s AND sent_at::date = %s
     """
-    cur.execute(sql, (request_id_in, sent_date))
+    cur.execute(sql, (datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc), message_id, sent_date))
     db.commit()
+    db.close   
     cur.close()
 
-    return f"Updated dispatched_count and dispatched_at for Request {request_id_in} with sent date {sent_date}"
+    return f"Updated dispatched_count and dispatched_at for Request with message id {message_id} with sent date {sent_date}"
 
 
 ##########
