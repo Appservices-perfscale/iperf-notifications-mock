@@ -81,11 +81,10 @@ def get_request():
     UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s AND sent_at::date = %s
     """
     cur.execute(sql, (datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc), message_id, sent_date))
-    db.commit()
-    db.close   
+    db.commit() 
     cur.close()
 
-    return f"Updated dispatched_count and dispatched_at for Request with message id {message_id} with sent date {sent_date}"
+    return f"Updated data for Request with message id {message_id} with sent date {sent_date}"
 
 
 ##########
