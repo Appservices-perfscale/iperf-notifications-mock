@@ -72,6 +72,8 @@ def get_request():
     db = get_db()
     print(f"Connecting to database {db} ") 
     cur = db.cursor()
+    
+    print(cur.execute("select * from items_notifications"))
 
     sql = """
     UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s AND sent_at::date = %s
