@@ -4,7 +4,7 @@
 import os
 import random
 import time
-# import datetime
+import datetime
 import click
 
 from flask import Flask, current_app, g, request, jsonify
