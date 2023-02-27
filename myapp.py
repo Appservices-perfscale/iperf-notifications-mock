@@ -4,7 +4,7 @@
 import os
 import random
 import time
-import datetime
+# import datetime
 import click
 
 from flask import Flask, current_app, g, request, jsonify
@@ -61,19 +61,21 @@ app.logger.info(f"Initialized DB pool (min {app.config['DB_POOL_COUNT_MIN']}, ma
 
 @app.route('/code/200', methods=['GET'])
 def get_request():
-    """Test."""
+    print(f">>> data: {request.data}")
+    print(f">>> values: {request.values}")
+    return "Hello there"
+
+
     # print(f">>> data: {request.data}")
     # print(f">>> values: {request.values}")
     # print(f">>> headers: {request.headers}")
     
-    print(request.get_json())
+#     print(request.get_json())
     
     # message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     # sent_date = request.get_json()["timestamp"]
 
     #TODO match NOW date 
-
-    return "Hello world"
 
     # db = get_db()
     # cur = db.cursor()
