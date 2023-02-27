@@ -63,17 +63,21 @@ app.logger.info(f"Initialized DB pool (min {app.config['DB_POOL_COUNT_MIN']}, ma
 def get_request():
     
     print(f">>> data: {request.get_json()}")
+    print(f">>> dataType: {type(request.get_json())}")
     
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     sent_date = request.get_json()["timestamp"]
+    
+    print(f"the message id: {message_id} and sent_date {sent_date}")
 
     #TODO match NOW date 
 
     db = get_db()
     print(f"Connecting to database {db} ") 
     cur = db.cursor()
+    cur.execute("select * from items_notifications")
     
-    for row in cur.execute("select * from items_notifications"):
+    for row in cur.fetchall():
         print(row)
         
 
