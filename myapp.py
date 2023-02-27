@@ -62,29 +62,30 @@ app.logger.info(f"Initialized DB pool (min {app.config['DB_POOL_COUNT_MIN']}, ma
 @app.route('/code/200', methods=['GET'])
 def get_request():
     """Test."""
-    print(f">>> data: {request.data}")
-    print(f">>> values: {request.values}")
-    print(f">>> headers: {request.headers}")
+    # print(f">>> data: {request.data}")
+    # print(f">>> values: {request.values}")
+    # print(f">>> headers: {request.headers}")
     
     print(request.get_json())
     
-    # request_id_in = request.get_json()["events"][0]["metadata"]["id"]
-    message_id = request.get_json()['message_id']
-    sent_date = request.get_json()["timestamp"]
+    # message_id = request.get_json()["events"][0]["metadata"]["message_id"]
+    # sent_date = request.get_json()["timestamp"]
 
     #TODO match NOW date 
 
-    db = get_db()
-    cur = db.cursor()
+    return "Hello world"
 
-    sql = """
-    UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s AND sent_at::date = %s
-    """
-    cur.execute(sql, (datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc), message_id, sent_date))
-    db.commit() 
-    cur.close()
+    # db = get_db()
+    # cur = db.cursor()
 
-    return f"Updated data for Request with message id {message_id} with sent date {sent_date}"
+    # sql = """
+    # UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s AND sent_at::date = %s
+    # """
+    # cur.execute(sql, (datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc), message_id, sent_date))
+    # db.commit() 
+    # cur.close()
+
+    # return f"Updated data for Request with message id {message_id} with sent date {sent_date}"
 
 
 ##########
