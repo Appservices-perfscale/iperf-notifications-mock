@@ -70,6 +70,7 @@ def get_request():
     #TODO match NOW date 
 
     db = get_db()
+    print(f"Connecting to database {db} ") 
     cur = db.cursor()
 
     sql = """
