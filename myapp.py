@@ -62,11 +62,7 @@ app.logger.info(f"Initialized DB pool (min {app.config['DB_POOL_COUNT_MIN']}, ma
 @app.route('/code/200', methods=['GET'])
 def get_request():
     
-    print(f">>> data: {request.data}")
-    print(f">>> values: {request.values}")
-    print(f">>> headers: {request.headers}")
-    
-    print(request.get_json())
+    print(f">>> data: {request.get_json()}")
     
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     sent_date = request.get_json()["timestamp"]
