@@ -73,11 +73,11 @@ def get_request():
     print(f"Connecting to database {db} ") 
     cur = db.cursor()
     
-    print(cur.execute("select * from items_notifications"))
+    for row in cur.execute("select * from items_notifications"):
+        print(row)
+        
 
-    sql = """
-    UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s AND sent_at::date = %s
-    """
+    sql = "UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s AND sent_at::date = %s"
     cur.execute(sql, (datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc), message_id, sent_date))
     db.commit() 
     cur.close()
