@@ -72,18 +72,20 @@ def get_request():
 
     #TODO match NOW date 
     
-    db = get_db()
-    print(f"Connecting to database {db} ") 
-    cur = db.cursor()
-    cur.execute("select * from items_notifications")
-    
-    for row in cur.fetchall():
-        print(row)
+    try:
+        db = get_db()
+        print(f"Connecting to database {db} ") 
+        cur = db.cursor()
 
-    sql = "UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s AND sent_at::date = %s"
-    cur.execute(sql, (datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc), message_id, sent_date))
-    db.commit() 
-    cur.close()
+        sql = "UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s AND sent_at::date = %s"
+        cur.execute(sql, (datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc), message_id, sent_date))
+        
+    except Exception as e:
+        print(f"There is an exception {e}")
+        
+    finally:
+        db.commit() 
+        cur.close()
 
     return f"Updated data for Request with message id {message_id} with sent date {sent_date}"
 
