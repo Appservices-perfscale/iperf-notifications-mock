@@ -71,10 +71,14 @@ def get_request():
     print(f"the message id: {message_id} and sent_date {sent_date}")
 
     #TODO match NOW date 
-
+    
     db = get_db()
     print(f"Connecting to database {db} ") 
     cur = db.cursor()
+    cur.execute("select * from items_notifications")
+    
+    for row in cur.fetchall():
+        print(row)
 
     sql = "UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s AND sent_at::date = %s"
     cur.execute(sql, (datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc), message_id, sent_date))
