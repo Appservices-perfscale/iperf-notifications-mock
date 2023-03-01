@@ -9,6 +9,7 @@ import click
 # import time
 
 from flask import Flask, current_app, g, request, jsonify
+from contextlib import contextmanager
 
 import psycopg2.pool
 
