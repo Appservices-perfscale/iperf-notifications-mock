@@ -6,7 +6,7 @@ import random
 import time
 import datetime
 import click
-import time
+# import time
 
 from flask import Flask, current_app, g, request, jsonify
 
@@ -71,7 +71,7 @@ def get_request():
     print(f"the message id: {message_id} and sent_date {sent_date}")
 
     #TODO match NOW date 
-    time.sleep(1)
+    #time.sleep(1) # testing
     
     try:
         db = get_db()
