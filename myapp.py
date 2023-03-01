@@ -61,40 +61,23 @@ app.logger.info(f"Initialized DB pool (min {app.config['DB_POOL_COUNT_MIN']}, ma
 
 @app.route('/code/200', methods=['GET'])
 def get_request():
-    
-    print(f"> method: {request.method}")
-    print(f"> data: {request.get_json()}")
-    print(f"> headers: {dict(request.headers)}")
-    
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     sent_date = request.get_json()["timestamp"]
     
-    print(f"> the message id: {message_id} and sent_date {sent_date}")
-
-    #TODO match NOW date 
-    #time.sleep(1) # testing
-    
     try:
         db = get_db()
-        print(f"> Connecting to database {db} ") 
         cur = db.cursor()
-
         sql = """
             INSERT INTO items_notifications(message_id, dispatched_at, dispatched_count) VALUES (%s, NOW(), 1)
                 ON CONFLICT (message_id) DO UPDATE
                 SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
         """
-        
-        ###sql = "UPDATE items_notifications SET dispatched_at = NOW(), dispatched_count = dispatched_count + 1 WHERE message_id = %s "
-        print("> Running this SQL command: ", sql % (message_id,))
         cur.execute(sql, (message_id,))
-        print("> Status message: ", cur.statusmessage)
         
     except Exception as e:
         print(f"There is an exception {e}")
         
     finally:
-        print("> Now committing and closing cur")
         db.commit() 
         cur.close()
 
