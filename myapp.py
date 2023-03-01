@@ -62,20 +62,21 @@ app.logger.info(f"Initialized DB pool (min {app.config['DB_POOL_COUNT_MIN']}, ma
 @app.route('/code/200', methods=['GET'])
 def get_request():
     
+    print(f"> method: {request.method}")
     print(f"> data: {request.get_json()}")
-    print(f"DataType: {type(request.get_json())}")
+    print(f"> headers: {dict(request.headers)}")
     
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     sent_date = request.get_json()["timestamp"]
     
-    print(f"the message id: {message_id} and sent_date {sent_date}")
+    print(f"> the message id: {message_id} and sent_date {sent_date}")
 
     #TODO match NOW date 
     #time.sleep(1) # testing
     
     try:
         db = get_db()
-        print(f"Connecting to database {db} ") 
+        print(f"> Connecting to database {db} ") 
         cur = db.cursor()
 
         sql = "UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s "
