@@ -38,7 +38,7 @@ def get_db():
 
     return g.db
 
-
+@app.teardown_appcontext
 def close_db(e=None):
     db = g.pop('db', None)
 
