@@ -79,14 +79,15 @@ def get_request():
         cur = db.cursor()
 
         sql = "UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s "
+        print("> Running this SQL command: ", sql % (datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc), message_id))
         cur.execute(sql, (datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc), message_id))
-        print(cur.statusmessage)
+        print("> Status message: ", cur.statusmessage)
         
     except Exception as e:
         print(f"There is an exception {e}")
         
     finally:
-        print("now committing and closing cur")
+        print("> Now committing and closing cur")
         db.commit() 
         cur.close()
 
