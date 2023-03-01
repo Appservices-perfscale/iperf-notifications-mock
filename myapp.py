@@ -39,6 +39,7 @@ def get_db():
 
     return g.db
 
+@app.teardown_appcontext
 def close_db(e=None):
     db = g.pop('db', None)
 
@@ -46,7 +47,6 @@ def close_db(e=None):
         current_app.config["db_pool"].putconn(db)
 
 
-app.teardown_appcontext(close_db)
 app.config["db_pool"] = psycopg2.pool.ThreadedConnectionPool(
     app.config['DB_POOL_COUNT_MIN'],
     app.config['DB_POOL_COUNT_MAX'],
