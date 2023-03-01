@@ -79,9 +79,15 @@ def get_request():
         print(f"> Connecting to database {db} ") 
         cur = db.cursor()
 
-        sql = "UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s "
-        print("> Running this SQL command: ", sql % (datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc), message_id))
-        cur.execute(sql, (datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc), message_id))
+        sql = """
+            INSERT INTO items_notifications(message_id, dispatched_at, dispatched_count) VALUES (NOW(), %s, 0)
+                ON CONFLICT (message_id) DO UPDATE
+                SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = dispatched_count + 1
+        """
+        
+        ###sql = "UPDATE items_notifications SET dispatched_at = NOW(), dispatched_count = dispatched_count + 1 WHERE message_id = %s "
+        print("> Running this SQL command: ", sql % (message_id,))
+        cur.execute(sql, (message_id,))
         print("> Status message: ", cur.statusmessage)
         
     except Exception as e:
