@@ -80,9 +80,9 @@ def get_request():
         cur = db.cursor()
 
         sql = """
-            INSERT INTO items_notifications(message_id, dispatched_at, dispatched_count) VALUES (%s, NOW(), 0)
+            INSERT INTO items_notifications(message_id, dispatched_at, dispatched_count) VALUES (%s, NOW(), 1)
                 ON CONFLICT (message_id) DO UPDATE
-                SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = dispatched_count + 1
+                SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
         """
         
         ###sql = "UPDATE items_notifications SET dispatched_at = NOW(), dispatched_count = dispatched_count + 1 WHERE message_id = %s "
