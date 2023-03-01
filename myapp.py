@@ -95,17 +95,16 @@ def get_request():
             cursor = conn.cursor()
             sql = "UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s "
             cursor.execute(sql, (datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc), message_id))
+            conn.commit()
             print(cursor.statusmessage)
+            cursor.close()
         
-    # except Exception as e:
-    #     print(f"There is an exception {e}")
-        
-    # finally:
-    #     print("now committing and closing cur")
-    #     db.commit() 
-    #     cur.close()
+        except Exception as e:
+            print(f"There is an exception {e}")
+            conn.rollback()
 
-    return f"Updated data for Request with message id {message_id} with sent date {sent_date}"
+        finally:
+            return f"Updated data for Request with message id {message_id} with sent date {sent_date}"
 
 
 ##########
