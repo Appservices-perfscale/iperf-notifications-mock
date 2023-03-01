@@ -9,7 +9,6 @@ import click
 # import time
 
 from flask import Flask, current_app, g, request, jsonify
-from contextlib import contextmanager
 
 import psycopg2.pool
 
@@ -40,26 +39,14 @@ def get_db():
 
     return g.db
 
-# @app.teardown_appcontext
-# def close_db(e=None):
-#     db = g.pop('db', None)
+def close_db(e=None):
+    db = g.pop('db', None)
 
-#     if db is not None:
-#         current_app.config["db_pool"].putconn(db)
-
-
-@contextmanager
-def get_connection():
-    con = get_db()
-    try:
-        yield con
-    finally:
-        db = g.pop('db', None)
-        if db is not None:
-            current_app.config["db_pool"].putconn(db)
+    if db is not None:
+        current_app.config["db_pool"].putconn(db)
 
 
-
+app.teardown_appcontext(close_db)
 app.config["db_pool"] = psycopg2.pool.ThreadedConnectionPool(
     app.config['DB_POOL_COUNT_MIN'],
     app.config['DB_POOL_COUNT_MAX'],
@@ -86,25 +73,24 @@ def get_request():
     #TODO match NOW date 
     #time.sleep(1) # testing
     
-    # try:
-        # db = get_db()
-        # print(f"Connecting to database {db} ") 
-        # cur = db.cursor()
+    try:
+        db = get_db()
+        print(f"Connecting to database {db} ") 
+        cur = db.cursor()
 
-    with get_connection() as conn:
-        try: 
-            cursor = conn.cursor()
-            sql = "UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s "
-            cursor.execute(sql, (datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc), message_id))
-            conn.commit()
-            print(cursor.statusmessage)
-            cursor.close()
+        sql = "UPDATE items_notifications SET dispatched_at = %s, dispatched_count = dispatched_count + 1 WHERE message_id = %s "
+        cur.execute(sql, (datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc), message_id))
+        print(cur.statusmessage)
         
-        except Exception as e:
-            print(f"There is an exception {e}")
-            conn.rollback()
-        finally:
-            return f"Updated data for Request with message id {message_id} with sent date {sent_date}"
+    except Exception as e:
+        print(f"There is an exception {e}")
+        
+    finally:
+        print("now committing and closing cur")
+        db.commit() 
+        cur.close()
+
+    return f"Updated data for Request with message id {message_id} with sent date {sent_date}"
 
 
 ##########
