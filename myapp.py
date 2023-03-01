@@ -102,7 +102,6 @@ def get_request():
         except Exception as e:
             print(f"There is an exception {e}")
             conn.rollback()
-
         finally:
             return f"Updated data for Request with message id {message_id} with sent date {sent_date}"
 
