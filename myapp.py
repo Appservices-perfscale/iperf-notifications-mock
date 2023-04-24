@@ -62,7 +62,6 @@ app.logger.info(f"Initialized DB pool (min {app.config['DB_POOL_COUNT_MIN']}, ma
 @app.route('/code/200', methods=['GET'])
 def get_request():
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
-    sent_date = request.get_json()["timestamp"]
     
     try:
         db = get_db()
@@ -80,8 +79,10 @@ def get_request():
     finally:
         db.commit() 
         cur.close()
+       
+    print
 
-    return f"Updated data for Request with message id {message_id} with sent date {sent_date}"
+    return f"Updated data for Request with message id {message_id}"
 
 
 ##########
