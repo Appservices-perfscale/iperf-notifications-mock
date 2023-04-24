@@ -71,6 +71,7 @@ def get_request():
                 ON CONFLICT (message_id) DO UPDATE
                 SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
         """
+        print(sql)
         cur.execute(sql, (message_id,))
         
     except Exception as e:
