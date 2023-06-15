@@ -86,7 +86,7 @@ def get_request():
     return f"Updated data for Request with message id {message_id}"
 
 @app.route('/code/500', methods=['GET'])
-def get_request():
+def get_request_500():
 #     We are testing my updating invalid column. Should return 500 error
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     
@@ -102,7 +102,7 @@ def get_request():
         cur.execute(sql, (message_id,))
         
     except Exception as e:
-        print(f"There is an exception {e}")
+        return InternalServerError()
         
     finally:
         db.commit() 
