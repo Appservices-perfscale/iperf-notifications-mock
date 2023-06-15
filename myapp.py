@@ -8,9 +8,10 @@ import datetime
 import click
 # import time
 
-from flask import Flask, current_app, g, request, jsonify
+from flask import Flask, current_app, g, request, jsonify, abort
 
 import psycopg2.pool
+
 
 
 app = Flask(__name__)
@@ -102,7 +103,7 @@ def get_request_500():
         cur.execute(sql, (message_id,))
         
     except Exception as e:
-        return InternalServerError()
+        abort(500)
         
     finally:
         db.commit() 
