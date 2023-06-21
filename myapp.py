@@ -88,7 +88,7 @@ def get_request():
 def get_request_500():
 #     We are testing my updating invalid column. Should return 500 error
     print(f">>> data: {request.data}")
-    print(f">>> values: {request.values}")
+    print(f">>> values: {request.values})
     return "Hello there" 
 
 
