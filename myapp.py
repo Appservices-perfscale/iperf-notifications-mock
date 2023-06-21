@@ -106,8 +106,6 @@ def get_request_500():
     finally:
         db.commit() 
         cur.close()
-       
-    print
 
     return f"Updated data for Request with message id {message_id}"
 
