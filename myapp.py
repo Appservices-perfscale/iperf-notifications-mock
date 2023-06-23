@@ -93,7 +93,7 @@ def get_request_500():
         db = get_db()
         cur = db.cursor()
         sql = """
-            INSERT INTO items_notifications(message_id, dispatched_at, dispatched_cou) VALUES (%s, NOW(), 1)
+            INSERT INTO items_notifications(message_id, dispatched_at, dispatched_count) VALUES (%s, NOW(), 1)
                 ON CONFLICT (message_id) DO UPDATE
                 SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
         """
@@ -107,7 +107,7 @@ def get_request_500():
         db.commit() 
         cur.close()
 
-    return f"Updated data for Request with message id {message_id}"
+    return f"Updated data for Request with message id {message_id}", 500
 
 
 ##########
