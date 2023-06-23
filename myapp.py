@@ -101,7 +101,7 @@ def get_request_500():
         cur.execute(sql, (message_id,))
         
     except Exception as e:
-        abort(500)
+        print(f"There is an exception {e}")
         
     finally:
         db.commit() 
