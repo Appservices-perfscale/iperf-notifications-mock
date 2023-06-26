@@ -110,8 +110,8 @@ def get_request_500():
     return f"Updated data for Request with message id {message_id}", 500
 
 @app.route('/code/201', methods=['GET'])
-def get_request_500():
-#     We are testing my updating invalid column. Should return 500 error
+def get_request_201():
+#     We are testing my updating invalid column. Should return 201 error
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     
     try:
