@@ -60,6 +60,32 @@ app.logger.info(f"Initialized DB pool (min {app.config['DB_POOL_COUNT_MIN']}, ma
 # Routes
 ##########
 
+
+
+@app.route('/code/205', methods=['GET'])
+def get_request():
+    message_id = request.get_json()["events"][0]["metadata"]["message_id"]
+    
+    try:
+        db = get_db()
+        cur = db.cursor()
+        sql = """
+            INSERT INTO items_notifications(message_id, dispatched_at, dispatched_count) VALUES (%s, NOW(), 1)
+                ON CONFLICT (message_id) DO UPDATE
+                SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
+        """
+        print(sql)
+        cur.execute(sql, (message_id,))
+        
+    except Exception as e:
+        print(f"There is an exception on the route 205 {e}")
+        
+    finally:
+        db.commit() 
+        cur.close()
+
+    return f"Updated data for Request with message id {message_id} for 205 endpoint"
+
 @app.route('/code/200', methods=['GET'])
 def get_request():
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
@@ -76,13 +102,13 @@ def get_request():
         cur.execute(sql, (message_id,))
         
     except Exception as e:
-        print(f"There is an exception {e}")
+        print(f"There is an exception on the 200 {e}")
         
     finally:
         db.commit() 
         cur.close()
 
-    return f"Updated data for Request with message id {message_id}"
+    return f"Updated data for Request with message id {message_id} for 200 endpoint"
 
 @app.route('/code/500', methods=['GET'])
 def get_request_500():
@@ -101,7 +127,7 @@ def get_request_500():
         cur.execute(sql, (message_id,))
         
     except Exception as e:
-        print(f"There is an exception {e}")
+        print(f"There is an exception on the 500 {e}")
         
     finally:
         db.commit() 
