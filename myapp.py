@@ -63,7 +63,7 @@ app.logger.info(f"Initialized DB pool (min {app.config['DB_POOL_COUNT_MIN']}, ma
 
 
 @app.route('/code/205', methods=['GET'])
-def get_request():
+def get_request_205():
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     
     try:
@@ -85,6 +85,78 @@ def get_request():
         cur.close()
 
     return f"Updated data for Request with message id {message_id} for 205 endpoint"
+
+@app.route('/code/206', methods=['GET'])
+def get_request_206():
+    message_id = request.get_json()["events"][0]["metadata"]["message_id"]
+    
+    try:
+        db = get_db()
+        cur = db.cursor()
+        sql = """
+            INSERT INTO items_notifications(message_id, dispatched_at, dispatched_count) VALUES (%s, NOW(), 1)
+                ON CONFLICT (message_id) DO UPDATE
+                SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
+        """
+        print(sql)
+        cur.execute(sql, (message_id,))
+        
+    except Exception as e:
+        print(f"There is an exception on the route 206 {e}")
+        
+    finally:
+        db.commit() 
+        cur.close()
+
+    return f"Updated data for Request with message id {message_id} for 206 endpoint"
+
+@app.route('/code/207', methods=['GET'])
+def get_request_207():
+    message_id = request.get_json()["events"][0]["metadata"]["message_id"]
+    
+    try:
+        db = get_db()
+        cur = db.cursor()
+        sql = """
+            INSERT INTO items_notifications(message_id, dispatched_at, dispatched_count) VALUES (%s, NOW(), 1)
+                ON CONFLICT (message_id) DO UPDATE
+                SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
+        """
+        print(sql)
+        cur.execute(sql, (message_id,))
+        
+    except Exception as e:
+        print(f"There is an exception on the route 207 {e}")
+        
+    finally:
+        db.commit() 
+        cur.close()
+
+    return f"Updated data for Request with message id {message_id} for 207 endpoint"
+
+@app.route('/code/208', methods=['GET'])
+def get_request_208():
+    message_id = request.get_json()["events"][0]["metadata"]["message_id"]
+    
+    try:
+        db = get_db()
+        cur = db.cursor()
+        sql = """
+            INSERT INTO items_notifications(message_id, dispatched_at, dispatched_count) VALUES (%s, NOW(), 1)
+                ON CONFLICT (message_id) DO UPDATE
+                SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
+        """
+        print(sql)
+        cur.execute(sql, (message_id,))
+        
+    except Exception as e:
+        print(f"There is an exception on the route 208 {e}")
+        
+    finally:
+        db.commit() 
+        cur.close()
+
+    return f"Updated data for Request with message id {message_id} for 208 endpoint"
 
 @app.route('/code/200', methods=['GET'])
 def get_request():
