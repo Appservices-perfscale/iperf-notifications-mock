@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notifications-webhooks-mock-service1
+spec:
+  selector:
+    app: notifications-webhooks-mock1
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notifications-webhooks-mock-service2
+spec:
+  selector:
+    app: notifications-webhooks-mock2
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 6000
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: notifications-webhooks-mock-service3
+spec:
+  selector:
+    app: notifications-webhooks-mock3
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 7000
