@@ -1,0 +1,146 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notifications-webhooks-mock1
+spec:
+  selector:
+    matchLabels:
+      app: notifications-webhooks-mock1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: notifications-webhooks-mock1
+    spec:
+      containers:
+        - name: notifications-webhooks-mock1
+          image: quay.io/rhcloudperfscale/notifications-webhooks-mock:latest
+          imagePullPolicy: Always
+          env:
+            - name: POSTGRESQL_HOST
+              value: storage-postgresql-service
+            - name: POSTGRESQL_PORT
+              value: '5432'
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  key: database-user
+                  name: storage-postgresql
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: database-password
+                  name: storage-postgresql
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: database-name
+                  name: storage-postgresql
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 250m
+            limits:
+              memory: 256Mi
+              cpu: 250m
+          ports:
+            - containerPort: 5000
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notifications-webhooks-mock2
+spec:
+  selector:
+    matchLabels:
+      app: notifications-webhooks-mock2
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: notifications-webhooks-mock2
+    spec:
+      containers:
+        - name: notifications-webhooks-mock2
+          image: quay.io/rhcloudperfscale/notifications-webhooks-mock:latest
+          imagePullPolicy: Always
+          env:
+            - name: POSTGRESQL_HOST
+              value: storage-postgresql-service
+            - name: POSTGRESQL_PORT
+              value: '5432'
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  key: database-user
+                  name: storage-postgresql
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: database-password
+                  name: storage-postgresql
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: database-name
+                  name: storage-postgresql
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 250m
+            limits:
+              memory: 256Mi
+              cpu: 250m
+          ports:
+            - containerPort: 6000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notifications-webhooks-mock3
+spec:
+  selector:
+    matchLabels:
+      app: notifications-webhooks-mock3
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: notifications-webhooks-mock3
+    spec:
+      containers:
+        - name: notifications-webhooks-mock3
+          image: quay.io/rhcloudperfscale/notifications-webhooks-mock:latest
+          imagePullPolicy: Always
+          env:
+            - name: POSTGRESQL_HOST
+              value: storage-postgresql-service
+            - name: POSTGRESQL_PORT
+              value: '5432'
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  key: database-user
+                  name: storage-postgresql
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: database-password
+                  name: storage-postgresql
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: database-name
+                  name: storage-postgresql
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 250m
+            limits:
+              memory: 256Mi
+              cpu: 250m
+          ports:
+            - containerPort: 7000
