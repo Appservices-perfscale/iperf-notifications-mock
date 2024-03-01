@@ -89,7 +89,7 @@ def get_request():
 @app.route('/code/delay', methods=['GET'])
 def get_request_delay():
     """
-    Testing delay
+    Testing delay a
     """
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     
