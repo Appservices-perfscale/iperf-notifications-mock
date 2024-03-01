@@ -86,16 +86,17 @@ def get_request():
     return f"Updated data for Request with message id {message_id} for 200 endpoint"
 
 
-@app.route('/code/delay', methods=['GET'])
-def get_request_delay():
+@app.route('/code/delay/<int:post_id>', methods=['GET'])
+def get_request_delay(post_id):
     """
     Testing delay a
     """
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     
-    number_sec = 10
+    number_sec = post_id
     
     time.sleep(number_sec)
+    print(f"testing delay with {number_sec}") 
     
     try:
         db = get_db()
