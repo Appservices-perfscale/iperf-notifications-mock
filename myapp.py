@@ -10,6 +10,7 @@ import click
 
 from flask import Flask, current_app, g, request, jsonify, abort
 
+
 import psycopg2.pool
 
 
@@ -61,8 +62,11 @@ app.logger.info(f"Initialized DB pool (min {app.config['DB_POOL_COUNT_MIN']}, ma
 ##########
 
 
-@app.route('/code/200', methods=['GET'])
-def get_request():
+@app.route('/code/success/<int:post_id>', methods=['GET'])
+def get_request(post_id):
+    """
+    Testing the success endpoints
+    """
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     
     try:
@@ -73,11 +77,10 @@ def get_request():
                 ON CONFLICT (message_id) DO UPDATE
                 SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
         """
-        print(sql)
         cur.execute(sql, (message_id,))
         
     except Exception as e:
-        print(f"There is an exception on the 200 {e}")
+        print(f"There is an exception on the success endpoint {post_id}. The exception is {e}")
         
     finally:
         db.commit() 
@@ -118,11 +121,14 @@ def get_request_delay(post_id):
 
     return f"Endpoint with simulated delay with {number_sec} seconds, message id {message_id}"
 
-
-@app.route('/code/500', methods=['GET'])
-def get_request_500():
-#     We are testing my updating invalid column. Should return 500 error
-    message_id = request.get_json()["events"][0]["metadata"]["message_id"]
+@app.route('/code/error/<int:post_id>', methods=['GET'])
+def get_request_error(post_id):
+    """
+    Testing error by adding misspelled messageid
+    """
+    message_id = request.get_json()["events"][0]["metadata"]["message_id2"]
+    
+    error_code = post_id
     
     try:
         db = get_db()
@@ -136,13 +142,13 @@ def get_request_500():
         cur.execute(sql, (message_id,))
         
     except Exception as e:
-        print(f"There is an exception on the 500 {e}")
+        print(f"There is an exception on error endpoint {post_id}. The error is...  {e}")
         
     finally:
         db.commit() 
         cur.close()
 
-    return f"Updated data for Request with message id {message_id}", 500
+    return f"Endpoint with simulated delay with {error_code} seconds, message id {message_id}"
 
 
 
