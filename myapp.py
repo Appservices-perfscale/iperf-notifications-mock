@@ -62,8 +62,8 @@ app.logger.info(f"Initialized DB pool (min {app.config['DB_POOL_COUNT_MIN']}, ma
 ##########
 
 
-@app.route('/code/success/<int:post_id>', methods=['GET'])
-def get_request(post_id):
+@app.route('/code/success/<endpoint>', methods=['GET'])
+def get_request(endpoint):
     """
     Testing the success endpoints
     """
@@ -80,23 +80,23 @@ def get_request(post_id):
         cur.execute(sql, (message_id,))
         
     except Exception as e:
-        print(f"There is an exception on the success endpoint {post_id}. The exception is {e}")
+        print(f"There is an exception on the success endpoint {endpoint}. The exception is {e}")
         
     finally:
         db.commit() 
         cur.close()
 
-    return f"Updated data for Request with message id {message_id} for 200 endpoint"
+    return f"Updated data for Request with endpoint: {endpoint} for 200 endpoint"
 
 
-@app.route('/code/delay/<int:post_id>', methods=['GET'])
-def get_request_delay(post_id):
+@app.route('/code/delay/<endpoint>', methods=['GET'])
+def get_request_delay(endpoint):
     """
     Testing delay a
     """
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     
-    number_sec = post_id
+    number_sec = 25 # Seconds
     
     time.sleep(number_sec)
     print(f"testing delay with {number_sec}") 
@@ -113,22 +113,20 @@ def get_request_delay(post_id):
         cur.execute(sql, (message_id,))
         
     except Exception as e:
-        print(f"There is an exception on the 200 {e}")
+        print(f"There is an exception on the delay endpoint {endpoint}. The exception is {e}")
         
     finally:
         db.commit() 
         cur.close()
 
-    return f"Endpoint with simulated delay with {number_sec} seconds, message id {message_id}"
+    return f"Endpoint with simulated delay for endpoint {endpoint}, message id {message_id}"
 
-@app.route('/code/error/<int:post_id>', methods=['GET'])
-def get_request_error(post_id):
+@app.route('/code/error/<endpoint>', methods=['GET'])
+def get_request_error(endpoint):
     """
-    Testing error by adding misspelled messageid
+    Testing error by adding misspelled messageid 500 error for message_id2
     """
     message_id = request.get_json()["events"][0]["metadata"]["message_id2"]
-    
-    error_code = post_id
     
     try:
         db = get_db()
@@ -142,13 +140,13 @@ def get_request_error(post_id):
         cur.execute(sql, (message_id,))
         
     except Exception as e:
-        print(f"There is an exception on error endpoint {post_id}. The error is...  {e}")
+        print(f"There is an exception on error endpoint {endpoint}. The error is...  {e}")
         
     finally:
         db.commit() 
         cur.close()
 
-    return f"Endpoint with simulated delay with {error_code} seconds, message id {message_id}"
+    return f"Endpoint with simulated error for endpoint {endpoint}, message id {message_id}"
 
 
 
