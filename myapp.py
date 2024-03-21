@@ -96,7 +96,7 @@ def get_request_delay(endpoint):
     """
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     
-    number_sec = 25 # Seconds
+    number_sec = 30 # Seconds
     
     time.sleep(number_sec)
     print(f"testing delay with {number_sec}") 
