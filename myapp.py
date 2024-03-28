@@ -90,7 +90,7 @@ def get_request(endpoint):
 
 
 @app.route('/code/timeout/<endpoint>', methods=['GET'])
-def get_request_delay(endpoint):
+def get_request_timeout(endpoint):
     """
     Testing delay a
     """
