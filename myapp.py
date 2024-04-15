@@ -69,7 +69,7 @@ def get_request(endpoint):
     """
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
 
-    app.logger.info(f"testing {message_id} ")
+    print(f"testing {message_id} ")
     
     try:
         db = get_db()
