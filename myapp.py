@@ -71,6 +71,7 @@ def get_request(endpoint):
     """
     Testing the success endpoints
     """
+    app.logger.info(f"testing get json { request.get_json() }")
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
 
     print(f"testing {message_id} ")
@@ -103,6 +104,7 @@ def get_request_timeout(endpoint):
     """
     Testing delay a
     """
+    
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     
     number_sec = 30 # Seconds
