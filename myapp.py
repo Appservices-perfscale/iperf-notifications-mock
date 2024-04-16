@@ -21,6 +21,9 @@ app.config['DB_POOL_COUNT_MIN'] = os.environ.get('DB_POOL_COUNT_MIN', 2)
 app.config['DB_POOL_COUNT_MAX'] = os.environ.get('DB_POOL_COUNT_MAX', 10)
 app.config['DB_POOL_GETCONN_ATTEMPTS'] = os.environ.get('DB_POOL_GETCONN_ATTEMPTS', 10)
 app.config['DATABASE'] = f"postgresql://{ os.environ['POSTGRESQL_USER'] }:{ os.environ['POSTGRESQL_PASSWORD'] }@{ os.environ['POSTGRESQL_HOST'] }:{ os.environ['POSTGRESQL_PORT'] }/{ os.environ['POSTGRESQL_DATABASE'] }"
+app.logger.setLevel(logging.INFO)  # Set log level to INFO
+handler = logging.FileHandler('app.log')  # Log to a file
+app.logger.addHandler(handler)
 
 
 ##########
@@ -70,6 +73,8 @@ def get_request(endpoint):
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
 
     print(f"testing {message_id} ")
+
+    app.logger.info(f"testing endpoint log ")
     
     try:
         db = get_db()
@@ -79,6 +84,7 @@ def get_request(endpoint):
                 ON CONFLICT (message_id) DO UPDATE
                 SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
         """
+        app.logger.info(f"the sql is {sql} ")
         cur.execute(sql, (message_id,))
         
     except Exception as e:
