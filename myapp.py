@@ -90,7 +90,7 @@ def get_request(endpoint):
         cur.execute(sql, (message_id,))
         
     except Exception as e:
-        print(f"There is an exception on the success endpoint {endpoint}. The exception is {e}")
+        return f"There is an exception on the success endpoint {endpoint}. The exception is {e}"
         
     finally:
         db.commit() 
