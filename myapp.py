@@ -6,6 +6,7 @@ import random
 import time
 import datetime
 import click
+import logging
 # import time
 
 from flask import Flask, current_app, g, request, jsonify, abort
