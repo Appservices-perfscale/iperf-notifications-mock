@@ -74,7 +74,8 @@ def get_request(endpoint):
     print(request.headers)
     app.logger.info(f"printing header of request: {request.headers} ")
     app.logger.info(f"testing get json { request.get_json() }")
-    message_id = request.get_json()["events"][0]["metadata"]["message_id"]
+    # message_id = request.get_json()["events"][0]["metadata"]["message_id"]
+    message_id = json.loads(request.text)["events"][0]["metadata"]["message_id"]
 
     print(f"testing {message_id} ")
 
