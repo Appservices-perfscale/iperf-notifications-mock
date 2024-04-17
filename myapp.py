@@ -66,7 +66,7 @@ app.logger.info(f"Initialized DB pool (min {app.config['DB_POOL_COUNT_MIN']}, ma
 ##########
 
 
-@app.route('/code/success/<endpoint>', methods=['GET'])
+@app.route('/code/success/<endpoint>', methods=['POST'])
 def get_request(endpoint):
     """
     Testing the success endpoints
