@@ -72,7 +72,7 @@ def get_request(endpoint):
     Testing the success endpoints
     """
     print(request.headers)
-    app.logger.info(f"printing header of request: {request.headers")
+    app.logger.info(f"printing header of request: {request.headers} ")
     app.logger.info(f"testing get json { request.get_json() }")
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
 
