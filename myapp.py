@@ -75,31 +75,33 @@ def get_request(endpoint):
     app.logger.info(f"printing header of request: {request.headers} ")
     app.logger.info(f"testing get json { request.get_json() }")
     # message_id = request.get_json()["events"][0]["metadata"]["message_id"]
+    message_id = request.text
+    print(f"testing {message_id} ")
     message_id = json.loads(request.text)["events"][0]["metadata"]["message_id"]
 
-    print(f"testing {message_id} ")
+    return f"testing Content-Type issue"
 
-    app.logger.info(f"testing endpoint log ")
+    # app.logger.info(f"testing endpoint log ")
     
-    try:
-        db = get_db()
-        cur = db.cursor()
-        sql = """
-            INSERT INTO items_notifications(message_id, dispatched_at, dispatched_count) VALUES (%s, NOW(), 1)
-                ON CONFLICT (message_id) DO UPDATE
-                SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
-        """
-        app.logger.info(f"the sql is {sql} ")
-        cur.execute(sql, (message_id,))
+    # try:
+    #     db = get_db()
+    #     cur = db.cursor()
+    #     sql = """
+    #         INSERT INTO items_notifications(message_id, dispatched_at, dispatched_count) VALUES (%s, NOW(), 1)
+    #             ON CONFLICT (message_id) DO UPDATE
+    #             SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
+    #     """
+    #     app.logger.info(f"the sql is {sql} ")
+    #     cur.execute(sql, (message_id,))
         
-    except Exception as e:
-        return f"There is an exception on the success endpoint {endpoint}. The exception is {e}"
+    # except Exception as e:
+    #     return f"There is an exception on the success endpoint {endpoint}. The exception is {e}"
         
-    finally:
-        db.commit() 
-        cur.close()
+    # finally:
+    #     db.commit() 
+    #     cur.close()
 
-    return f"Updated data for Request with endpoint: {endpoint} for 200 endpoint"
+    # return f"Updated data for Request with endpoint: {endpoint} for 200 endpoint"
 
 
 @app.route('/code/timeout/<endpoint>', methods=['GET'])
