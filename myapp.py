@@ -8,6 +8,7 @@ import datetime
 import click
 import logging
 # import time
+import json
 
 from flask import Flask, current_app, g, request, jsonify, abort
 
@@ -71,18 +72,16 @@ def get_request(endpoint):
     """
     Testing the success endpoints
     """
-    print(request.headers)
     app.logger.info(f"printing header of request: {request.headers} ")
     #app.logger.info(f"testing get json { request.get_json() }")
     # message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     #message_id = request.text
     #print(f"testing {message_id} ")
-    #message_id = json.loads(request.text)["events"][0]["metadata"]["message_id"]
+    print(request.get_data())
+    print(f"the second {request.stream.read()}")
+    return request.get_data()
+    # message_id = json.loads(request.data)["events"][0]["metadata"]["message_id"]
 
-    return f"testing Content-Type issue"
-
-    # app.logger.info(f"testing endpoint log ")
-    
     # try:
     #     db = get_db()
     #     cur = db.cursor()
