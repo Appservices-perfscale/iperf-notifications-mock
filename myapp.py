@@ -77,7 +77,7 @@ def get_request(endpoint):
     # message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     # print(f"the second {request.stream.read()}")
     message_id = request.get_json()["events"][0]["metadata"]["message_id"]
-    print(f"the message id is: {message_id} ")
+    print(f"the payload is: {request.get_json()} ")
 
     try:
         db = get_db()
