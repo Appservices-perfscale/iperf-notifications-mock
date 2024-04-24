@@ -75,35 +75,32 @@ def get_request(endpoint):
     app.logger.info(f"printing header of request: {request.headers} ")
     #app.logger.info(f"testing get json { request.get_json() }")
     # message_id = request.get_json()["events"][0]["metadata"]["message_id"]
-    #message_id = request.text
-    #print(f"testing {message_id} ")
-    print(request.get_data())
-    print(f"the second {request.stream.read()}")
-    return request.get_data()
-    # message_id = json.loads(request.data)["events"][0]["metadata"]["message_id"]
+    # print(f"the second {request.stream.read()}")
+    message_id = request.get_json()["events"][0]["metadata"]["message_id"]
+    print(f"the message id is: {message_id} ")
 
-    # try:
-    #     db = get_db()
-    #     cur = db.cursor()
-    #     sql = """
-    #         INSERT INTO items_notifications(message_id, dispatched_at, dispatched_count) VALUES (%s, NOW(), 1)
-    #             ON CONFLICT (message_id) DO UPDATE
-    #             SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
-    #     """
-    #     app.logger.info(f"the sql is {sql} ")
-    #     cur.execute(sql, (message_id,))
+    try:
+        db = get_db()
+        cur = db.cursor()
+        sql = """
+            INSERT INTO items_notifications(message_id, dispatched_at, dispatched_count) VALUES (%s, NOW(), 1)
+                ON CONFLICT (message_id) DO UPDATE
+                SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
+        """
+        app.logger.info(f"the sql is {sql} ")
+        cur.execute(sql, (message_id,))
         
-    # except Exception as e:
-    #     return f"There is an exception on the success endpoint {endpoint}. The exception is {e}"
+    except Exception as e:
+        return f"There is an exception on the success endpoint {endpoint}. The exception is {e}"
         
-    # finally:
-    #     db.commit() 
-    #     cur.close()
+    finally:
+        db.commit() 
+        cur.close()
 
-    # return f"Updated data for Request with endpoint: {endpoint} for 200 endpoint"
+    return f"Updated data for Request with endpoint: {endpoint} for 200 endpoint"
 
 
-@app.route('/code/timeout/<endpoint>', methods=['GET'])
+@app.route('/code/timeout/<endpoint>', methods=['GET', 'POST'])
 def get_request_timeout(endpoint):
     """
     Testing delay a
@@ -136,7 +133,7 @@ def get_request_timeout(endpoint):
 
     return f"Endpoint with timeout for endpoint {endpoint}, message id {message_id}"
 
-@app.route('/code/delay/<endpoint>', methods=['GET'])
+@app.route('/code/delay/<endpoint>', methods=['GET', 'POST'])
 def get_request_delay(endpoint):
     """
     Testing delay a
@@ -168,7 +165,7 @@ def get_request_delay(endpoint):
 
     return f"Endpoint with simulated delay for endpoint {endpoint}, message id {message_id}"
 
-@app.route('/code/error/<endpoint>', methods=['GET'])
+@app.route('/code/error/<endpoint>', methods=['GET', 'POST'])
 def get_request_error(endpoint):
     """
     Testing error by adding misspelled messageid 500 error for message_id2
