@@ -168,9 +168,9 @@ def get_request_delay(endpoint):
 @app.route('/code/error/<endpoint>', methods=['GET', 'POST'])
 def get_request_error(endpoint):
     """
-    Testing error by adding misspelled messageid 500 error for message_id2
+    Testing error by adding misspelled messageid 500 error for message_id
     """
-    message_id = request.get_json()["events"][0]["metadata"]["message_id2"]
+    message_id = request.get_json()["events"][0]["metadata"]["message_id"]
     
     try:
         db = get_db()
@@ -190,7 +190,7 @@ def get_request_error(endpoint):
         db.commit() 
         cur.close()
 
-    return f"Endpoint with simulated error for endpoint {endpoint}, message id {message_id}"
+    return f"Endpoint with simulated error for endpoint {endpoint}, message id {message_id2}"
 
 
 
