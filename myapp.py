@@ -110,7 +110,6 @@ def get_request_timeout(endpoint):
     
     number_sec = 30 # Seconds
     
-    time.sleep(number_sec)
     print(f"testing timeout with {number_sec}") 
     
     try:
@@ -130,6 +129,8 @@ def get_request_timeout(endpoint):
     finally:
         db.commit() 
         cur.close()
+
+    time.sleep(number_sec)
 
     return f"Endpoint with timeout for endpoint {endpoint}, message id {message_id}"
 
