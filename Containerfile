@@ -21,4 +21,4 @@ COPY . /usr/src/app
 
 USER 1001
 
-CMD gunicorn --worker-class sync --workers 3 --threads 1 --access-logfile - --error-logfile - --bind 0.0.0.0:5000 myapp:app
+CMD gunicorn --worker-class sync --workers 4 --threads 4 --access-logfile - --error-logfile - --bind 0.0.0.0:5000 myapp:app
