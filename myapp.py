@@ -194,6 +194,15 @@ def get_request_error(endpoint):
     return f"Endpoint with simulated error for endpoint {endpoint}, message id {message_id2}"
 
 
+@app.route('/v1/sendEmails', methods=['GET', 'POST'])
+def get_request_error(endpoint):
+    """
+    Testing emails
+    """ 
+    
+    return f"Mocking testing sending emails"
+
+
 
 
 ##########
