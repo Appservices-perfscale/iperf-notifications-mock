@@ -197,7 +197,7 @@ def get_request_error(endpoint):
 @app.route('/v1/sendEmails', methods=['GET', 'POST'])
 def get_request_error(endpoint):
     """
-    Testing emails
+    Testing emails notifications
     """ 
     
     return f"Mocking testing sending emails"
