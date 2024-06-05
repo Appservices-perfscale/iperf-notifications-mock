@@ -195,7 +195,7 @@ def get_request_error(endpoint):
 
 
 @app.route('/v1/sendEmails', methods=['GET', 'POST'])
-def get_send_email(endpoint):
+def get_send_email():
     """
     Testing emails notifications submission
     """ 
