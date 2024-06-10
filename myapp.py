@@ -203,6 +203,63 @@ def get_send_email():
     return f"Mocking testing sending emails"
 
 
+@app.route('/v1/it-user-service', methods=['GET', 'POST'])
+def get_send_email():
+    """
+    Testing emails notifications submission
+    """ 
+
+    json_format_it_service = [
+  {
+    "id": "df645b37-3e88-4fd9-a0d3-df8cc84c5216",
+    "authentications": [
+      {
+        "principal": "guillaumeduval-stage",
+        "providerName": "guillaumeduval-stage"
+      },
+      {
+        "principal": "guillaumeduval-stage",
+        "providerName": "guillaumeduval-stage"
+      }
+    ],
+    "accountRelationships": [
+      {
+        "accountId": "someId",
+        "startDate": "2023-01-01",
+        "id":"7b92c949-5033-428c-9fe9-62f11ff0dd4f",
+        "isPrimary": true,
+        "permissions": [
+          {
+            "permissionCode": "admin:org:all",
+            "startDate": "2023-01-01",
+            "id": "f2138fc6-f67f-4954-931e-39e5880882d2"
+          }
+        ],
+        "emails": [
+          {
+            "address": "gduval-stage@foo.com",
+            "isPrimary": true,
+            "id": "5b3b4c54-7bcc-45dc-adff-e99ccbc3ad54",
+            "isConfirmed": true,
+            "status": "active"
+          }
+        ]
+      }
+    ],
+    "personalInformation": {
+      "firstName": "foo",
+      "lastNames": "faa",
+      "prefix": "he",
+      "localeCode": "23",
+      "timeZone": "here",
+      "rawOffset": "25"
+    }
+  }
+]
+    
+    return f"Mocking testing sending emails"
+
+
 
 
 ##########
