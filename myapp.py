@@ -199,6 +199,9 @@ def get_send_email():
     """
     Testing emails notifications submission
     """ 
+
+    app.logger.info(f"testing sendEmails ")
+    print("testing sendEmails")
     
     return f"Mocking testing sending emails"
 
@@ -214,12 +217,12 @@ def it_user_service():
             "id": "df645b37-3e88-4fd9-a0d3-df8cc84c5216",
             "authentications": [
             {
-                "principal": "rhn-engineering-lrios",
-                "providerName": "rhn-engineering-lrios"
+                "principal": "tester",
+                "providerName": "tester"
             },
             {
-                "principal": "rhn-engineering-lrios",
-                "providerName": "rhn-engineering-lrios"
+                "principal": "tester",
+                "providerName": "tester"
             }
             ],
             "accountRelationships": [
