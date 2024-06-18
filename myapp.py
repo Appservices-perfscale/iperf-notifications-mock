@@ -206,7 +206,7 @@ def get_send_email():
     return f"Mocking testing sending emails"
 
 
-@app.route('/v1/it-user-service', methods=['GET', 'POST'])
+@app.route('/v2/findUsers', methods=['GET', 'POST'])
 def it_user_service():
     """
     Testing emails notifications submission
