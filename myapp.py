@@ -200,7 +200,7 @@ def get_send_email():
     Testing emails notifications submission
     """ 
 
-    number_sec = .5 # Seconds as requested
+    number_sec = 0.5 # Seconds as requested
     
     time.sleep(number_sec)
     print(f"testing delay for sendemails: {number_sec}") 
