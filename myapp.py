@@ -200,6 +200,11 @@ def get_send_email():
     Testing emails notifications submission
     """ 
 
+    number_sec = .5 # Seconds as requested
+    
+    time.sleep(number_sec)
+    print(f"testing delay for sendemails: {number_sec}") 
+
     app.logger.info(f"testing sendEmails ")
     print("testing sendEmails")
     
@@ -259,6 +264,11 @@ def it_user_service():
             }
         }
     ]
+
+    number_sec = 1 # delay seconds
+    
+    time.sleep(number_sec)
+    print(f"find user delay: {number_sec}") 
     
     print("Mocking IT service")
     return jsonify(json_format_it_service)
