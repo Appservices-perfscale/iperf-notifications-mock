@@ -200,7 +200,10 @@ def get_send_email():
     Testing emails notifications submission
     """ 
 
-    number_sec = 0.5 # Seconds as requested
+    number_sec = 0.5 # Seconds
+    
+    payload = request.get_json()
+    print(f"The payload is {payload} ")
     
     time.sleep(number_sec)
     print(f"testing delay for sendemails: {number_sec}") 
