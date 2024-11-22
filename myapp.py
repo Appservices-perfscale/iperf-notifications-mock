@@ -192,7 +192,7 @@ def get_request_error(endpoint):
         db.commit() 
         cur.close()
 
-    return f"Endpoint with simulated error for endpoint {endpoint}, message id {message_id2}"
+    return f"Endpoint with simulated error for endpoint {endpoint}, message id {message_id}"
 
 
 @app.route('/v1/sendEmails', methods=['GET', 'POST'])
