@@ -9,6 +9,7 @@ import click
 import logging
 # import time
 import json
+import re
 
 from flask import Flask, current_app, g, request, jsonify, abort
 
@@ -202,9 +203,16 @@ def get_send_email():
 
     number_sec = 0.5 # Seconds
     
-    payload = request.get_json()
-    print(f"The payload is {payload} ")
+    email_payload = request.get_json()
     
+    for value in email_payload['emails'][0].values():
+        urls = re.findall('(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+', value)
+        for url in urls:
+            if 'https://console.stage.redhat.com/insights/policies/policy/' in url:
+                uuid = url.split('/')[-1]
+                
+    print(f"The uuid is {uuid}")
+        
     time.sleep(number_sec)
     print(f"testing delay for sendemails: {number_sec}") 
 
