@@ -215,9 +215,26 @@ def get_send_email():
         
     time.sleep(number_sec)
     print(f"testing delay for sendemails: {number_sec}") 
-
     app.logger.info(f"testing sendEmails ")
     print("testing sendEmails")
+    
+    try:
+        db = get_db()
+        cur = db.cursor()
+        sql = """
+            INSERT INTO items_notifications(message_id, dispatched_at, dispatched_count) VALUES (%s, NOW(), 1)
+                ON CONFLICT (message_id) DO UPDATE
+                SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
+        """
+        app.logger.info(f"the sql is {sql} ")
+        cur.execute(sql, (uuid,))
+        
+    except Exception as e:
+        return f"There is an exception on the success endpoint {uuid}. The exception is {e}"
+        
+    finally:
+        db.commit() 
+        cur.close()
     
     return f"Mocking testing sending emails"
 
