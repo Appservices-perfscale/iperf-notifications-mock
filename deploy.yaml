@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: notifications-webhooks-mock
-          image: quay.io/rhcloudperfscale/notifications-webhooks-mock:latest
+          image: quay.io/redhat-user-workloads/hcc-perfscale-tenant/iperf-notifications-mock:latest-main
           imagePullPolicy: Always
           env:
             - name: POSTGRESQL_HOST
