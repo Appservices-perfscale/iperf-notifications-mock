@@ -211,10 +211,8 @@ def get_send_email():
             if 'https://console.stage.redhat.com/insights/policies/policy/' in url:
                 uuid = url.split('/')[-1]
                 
-    print(f"The uuid is {uuid}")
-        
     time.sleep(number_sec)
-    print(f"testing delay for sendemails: {number_sec}") 
+    print(f"Delay for sendemails set at: {number_sec}") 
     app.logger.info(f"testing sendEmails ")
     print("testing sendEmails")
     
@@ -222,9 +220,9 @@ def get_send_email():
         db = get_db()
         cur = db.cursor()
         sql = """
-            INSERT INTO items_notifications(message_id, dispatched_at, dispatched_count) VALUES (%s, NOW(), 1)
+            INSERT INTO items_notifications(message_id, email_sent_at, dispatched_count) VALUES (%s, NOW(), 1)
                 ON CONFLICT (message_id) DO UPDATE
-                SET dispatched_at = EXCLUDED.dispatched_at, dispatched_count = items_notifications.dispatched_count + 1
+                SET email_sent_at = EXCLUDED.email_sent_at, dispatched_count = items_notifications.dispatched_count + 1
         """
         app.logger.info(f"the sql is {sql} ")
         cur.execute(sql, (uuid,))
