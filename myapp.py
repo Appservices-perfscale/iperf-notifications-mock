@@ -7,7 +7,6 @@ import time
 import datetime
 import click
 import logging
-# import time
 import json
 import re
 
