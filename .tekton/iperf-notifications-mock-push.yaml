@@ -404,7 +404,7 @@ spec:
         value: $(tasks.build-image-index.results.IMAGE_URL)
       - name: ADDITIONAL_TAGS
         value:
-          - "latest-{{source_branch}}"
+        - latest-{{source_branch}}
       runAfter:
       - build-image-index
       taskRef:
@@ -466,7 +466,8 @@ spec:
       optional: true
     - name: netrc
       optional: true
-  taskRunTemplate: {}
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-iperf-notifications-mock
   workspaces:
   - name: git-auth
     secret:
