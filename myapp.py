@@ -208,7 +208,10 @@ def get_send_email():
         urls = re.findall('(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+', str(value))
         for url in urls:
             if 'https://console.stage.redhat.com/insights/policies/policy/' in url:
-                uuid = url.split('/')[-1]
+                # Extract UUID from URL, handling query parameters if present
+                # Remove query parameters first (if any), then extract UUID
+                url_without_params = url.split('?')[0]
+                uuid = url_without_params.split('/')[-1]
                 
     time.sleep(number_sec)
     print(f"Delay for sendemails set at: {number_sec}") 
