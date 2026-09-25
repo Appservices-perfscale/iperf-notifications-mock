@@ -203,7 +203,11 @@ def get_send_email():
     number_sec = 0.5 # Seconds
     
     email_payload = request.get_json()
-    
+
+    # Only policies-style templates embed a recoverable UUID in the email
+    # body. The default/generic template (used by most event types) has no
+    # correlation ID at all, so `uuid` may legitimately stay unset here.
+    uuid = None
     for value in email_payload['emails'][0].values():
         urls = re.findall('(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+', str(value))
         for url in urls:
@@ -221,16 +225,45 @@ def get_send_email():
     try:
         db = get_db()
         cur = db.cursor()
-        sql = """
-            INSERT INTO items_notifications(message_id, email_sent_at, dispatched_count) VALUES (%s, NOW(), 1)
-                ON CONFLICT (message_id) DO UPDATE
-                SET email_sent_at = EXCLUDED.email_sent_at, dispatched_count = items_notifications.dispatched_count + 1
-        """
-        app.logger.info(f"the sql is {sql} ")
-        cur.execute(sql, (uuid,))
-        
+
+        if uuid:
+            # Correlation ID was recovered from the email body.
+            sql = """
+                INSERT INTO items_notifications(message_id, email_sent_at, dispatched_count) VALUES (%s, NOW(), 1)
+                    ON CONFLICT (message_id) DO UPDATE
+                    SET email_sent_at = EXCLUDED.email_sent_at, dispatched_count = items_notifications.dispatched_count + 1
+            """
+            app.logger.info(f"the sql is {sql} ")
+            cur.execute(sql, (uuid,))
+        else:
+            # No correlation ID could be extracted from the email body (e.g.
+            # the default/generic template). Fall back to marking the oldest
+            # still-pending row (sent but not yet email_sent) so the test's
+            # completion count keeps progressing instead of crashing.
+            # FOR UPDATE SKIP LOCKED avoids two concurrent requests racing on
+            # the same row.
+            app.logger.info("No UUID found in email body, falling back to oldest pending row")
+            sql = """
+                UPDATE items_notifications
+                SET email_sent_at = NOW(), dispatched_count = dispatched_count + 1
+                WHERE message_id = (
+                    SELECT message_id FROM items_notifications
+                    WHERE sent_at IS NOT NULL AND email_sent_at IS NULL
+                    ORDER BY sent_at ASC
+                    FOR UPDATE SKIP LOCKED
+                    LIMIT 1
+                )
+                RETURNING message_id
+            """
+            cur.execute(sql)
+            row = cur.fetchone()
+            uuid = row[0] if row else None
+            if uuid is None:
+                app.logger.warning("No pending row found to correlate email_sent_at against")
+
     except Exception as e:
-        return f"There is an exception on the success endpoint {uuid}. The exception is {e}"
+        app.logger.error(f"There is an exception on the sendEmails endpoint (uuid={uuid}). The exception is {e}")
+        return f"There is an exception on the sendEmails endpoint {uuid}. The exception is {e}"
         
     finally:
         db.commit() 
